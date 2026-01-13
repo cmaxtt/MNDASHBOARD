@@ -1,0 +1,148 @@
+Role: You are an Expert Full-Stack Vibe Coder. Your goal is to extend an existing React/Node.js application by building a high-performance SQL Dashboard. Environment: VSCode, Windows 11, MS SQL Server 2022. Constraint: The mssql connection logic is already functional. Do not recreate it. Integrate with the existing connection pool and session state.
+
+High-Level Architecture
+Frontend: React 18, Material-UI (MUI) v5/6, React Context API for global state.
+
+Backend: Node.js/Express, mssql (tedious/msnodesqlv8 driver).
+
+State Management: Use a DatabaseContext to provide the connection status and global query results to the entire dashboard.
+
+The 5-Part Implementation Plan
+Part 1: Dashboard Foundation & State Bridge
+Task: Create the /dashboard route and the high-level layout.
+
+State Bridge: Implement a DatabaseContext in React. If the user isn't connected (check existing state/session), redirect to the connection page.
+
+UI: Build a responsive Sidebar (navigation) and Header (showing "Connected to: [DB Name]").
+
+Backend: Create a /api/db/schema endpoint that returns a list of tables and columns from INFORMATION_SCHEMA. This is the "brain" for the query builder.
+
+Verification: Ensure the dashboard loads only when connected and successfully fetches table metadata.
+
+Part 2: Smart Query Selection & Execution Engine
+Task: Implement the "Pre-defined Queries" and the execution bridge.
+
+UI: A searchable Autocomplete (MUI) in the sidebar for 10 sample queries.
+
+Logic: When a query is selected, it populates a "Query Workspace."
+
+Backend: Enhance the /api/execute endpoint. Use Input Parameterization (never template strings) to prevent SQL injection.
+
+Verification: Execute a "SELECT TOP 10" query and see the raw data log in the console and a temporary JSON preview.
+
+Part 3: Visual Query Builder (The Core)
+Task: A drag-and-drop or dropdown-based UI to construct SQL.
+
+UI: Create a component where users select: Table -> Columns -> Filters (WHERE) -> Sort (ORDER BY).
+
+Logic: Dynamically generate the SQL string based on the UI state. Update the "Query Workspace" in real-time.
+
+Verification: Build a complex query (e.g., SELECT Name FROM Users WHERE Active = 1) via UI and verify the generated string is syntactically correct for MS SQL.
+
+Part 4: Advanced DataGrid & Visualization
+Task: Transform raw data into professional insights.
+
+UI: Integrate MUI DataGrid. Enable pagination (client-side initially), sorting, and filtering.
+
+Visualization: Use react-chartjs-2. Implement a "Smart Chart" component that renders a Bar or Pie chart if the query result contains a string column and a numeric column.
+
+Export: Add a "Download CSV" button using PapaParse.
+
+Verification: Run a "Sales by Region" query and see both a table and a corresponding chart.
+
+Part 5: History, Favorites, and UX Polish
+Task: Persistence and "Vibe" refinement.
+
+Persistence: Use localStorage to save "Favorite Queries" and "Recent History."
+
+UX: Add framer-motion for smooth transitions between dashboard panels. Use MUI Snackbar for success/error toasts.
+
+Security Audit: Final check to ensure no raw user input is concatenated into SQL strings.
+
+Verification: Close the browser, reopen, and ensure "Favorite Queries" are still accessible.
+
+Delivery Instructions
+Provide full file contents for new files.
+
+Provide clear diffs for existing files (like App.js or index.js).
+
+Include a requirements.txt or npm install command for each part.
+
+Document the folder structure clearly.
+
+
+5. MS SQL Specificity
+MS SQL Server uses specific syntax (like SELECT TOP 10 instead of LIMIT 10). I've framed the prompt to ensure Gemini stays within the T-SQL (Microsoft) dialect rather than generic MySQL.
+
+Would you like me to generate the specific "Sample Queries" list (Part 2) or the "Database Schema" SQL query (Part 1) to give to Gemini right away?
+
+<====================>
+This is excellent. Providing the exact schemas for tblInvoices, tblInvoiceDetails, and tblProducts is the "cheat code" that will make Gemini Antigravity work flawlessly. It can now write real SQL instead of generic placeholders.
+
+I have updated the prompt to incorporate your MEDBAGSQLDB schema. This version is specifically tuned to handle the relationships between your invoices and products.
+
+Optimized Prompt: The "MEDBAG" Dashboard Builder
+Role: You are an Expert Vibe Coder. You are building a professional Analytics Dashboard for the MEDBAGSQLDB system. Tech Stack: React (MUI), Node.js (Express), mssql package. Database Context: MS SQL Server 2022. You are working with three primary tables:
+
+tblInvoices: Header info (Dates, Totals, Salespeople, Payment Types).
+
+tblInvoiceDetails: Line items (Linked via InvoiceID).
+
+tblProducts: Inventory data (Linked via ProductCode).
+
+Phase 1: Context-Aware Foundation
+Goal: Set up the Dashboard layout and metadata bridge.
+
+Task: Create a React Context that stores the connection state.
+
+Schema Discovery: Create a backend route /api/schema/summary that returns the column names for your three tables so the UI can auto-populate dropdowns.
+
+Verification: Ensure the sidebar renders and the "Connection Status" shows "Connected to MEDBAGSQLDB."
+
+Phase 2: The "MEDBAG" Analytics Engine (Pre-defined Queries)
+Goal: Implement 5-10 high-value queries based on the provided schema.
+
+Required Queries to implement:
+
+Daily Sales Trend: SELECT CAST(InvoiceDate AS DATE), SUM(SaletotalVI) FROM tblInvoices GROUP BY CAST(InvoiceDate AS DATE)
+
+Top 5 Salespeople: SELECT TOP 5 SalespersonName, SUM(SaletotalVI) FROM tblInvoices GROUP BY SalespersonName ORDER BY 2 DESC
+
+Stock Alert: SELECT ProductName, QuantityOnHand FROM tblProducts WHERE QuantityOnHand < MinimumStock
+
+Revenue by Payment Type: SELECT PaymentType, SUM(SaletotalVI) FROM tblInvoices GROUP BY PaymentType
+
+Recent Invoices: SELECT TOP 50 * FROM tblInvoices ORDER BY InvoiceDate DESC
+
+Backend: Create the /api/execute endpoint using req.body.query with strict validation.
+
+Phase 3: Visual Query Builder (Relational)
+Goal: Allow users to build queries across tables.
+
+UI: Create a "Join Builder" that understands the link: tblInvoices.InvoiceID = tblInvoiceDetails.InvoiceID.
+
+Feature: User selects "Sales by Product Category." The UI should generate the JOIN between tblInvoiceDetails and tblProducts.
+
+Verification: Generate a query that lists Product Names and their total sold quantity from tblInvoiceDetails.
+
+Phase 4: DataGrid & "MedBag" Visuals
+Goal: Professional data presentation.
+
+DataGrid: Implement MUI DataGrid with currency formatting for columns like SaletotalVI and SaleCost.
+
+Charts: Use Chart.js to create:
+
+A Line Chart for the Daily Sales Trend.
+
+A Doughnut Chart for Payment Type breakdown (MppCash, MppVisa, MppLinx).
+
+Export: Enable CSV export for the Invoice lists.
+
+Phase 5: Polish & Security
+Goal: Production-ready feel.
+
+UX: Add a "Loading Spinner" that triggers during heavy SQL execution.
+
+Persistence: Save "Favorite" inventory reports to localStorage.
+
+Safety: Ensure all numeric inputs (like InvoiceNo or ProductCode) are sanitized before being sent to the mssql driver.
