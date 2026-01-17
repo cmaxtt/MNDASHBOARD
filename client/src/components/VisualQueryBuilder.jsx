@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Paper, Typography, Box, FormControl, InputLabel, Select, MenuItem, Chip, Button, Grid } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useDatabase } from '../context/DatabaseContext';
@@ -8,10 +8,20 @@ const VisualQueryBuilder = ({ onExecute }) => {
     const [selectedTable, setSelectedTable] = useState('');
     const [selectedColumns, setSelectedColumns] = useState([]);
     const [filters, setFilters] = useState([]); // { column, operator, value }
-    const [generatedSql, setGeneratedSql] = useState('');
 
-    useEffect(() => {
-        generateSql();
+    const generatedSql = useMemo(() => {
+        if (!selectedTable) return '';
+
+        let cols = selectedColumns.length > 0 ? selectedColumns.join(', ') : '*';
+        let sql = `SELECT ${cols} FROM ${selectedTable}`;
+
+        if (filters.length > 0) {
+            // Very basic filter logic for demo
+            const whereClauses = filters.map(f => `${f.column} ${f.operator} '${f.value}'`);
+            sql += ` WHERE ${whereClauses.join(' AND ')}`;
+        }
+
+        return sql;
     }, [selectedTable, selectedColumns, filters]);
 
     const handleTableChange = (event) => {
@@ -31,24 +41,6 @@ const VisualQueryBuilder = ({ onExecute }) => {
         }
 
         setSelectedColumns(newChecked);
-    };
-
-    const generateSql = () => {
-        if (!selectedTable) {
-            setGeneratedSql('');
-            return;
-        }
-
-        let cols = selectedColumns.length > 0 ? selectedColumns.join(', ') : '*';
-        let sql = `SELECT ${cols} FROM ${selectedTable}`;
-
-        if (filters.length > 0) {
-            // Very basic filter logic for demo
-            const whereClauses = filters.map(f => `${f.column} ${f.operator} '${f.value}'`);
-            sql += ` WHERE ${whereClauses.join(' AND ')}`;
-        }
-
-        setGeneratedSql(sql);
     };
 
     return (

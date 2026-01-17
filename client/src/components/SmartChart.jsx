@@ -58,7 +58,7 @@ const SmartChart = ({ data, title }) => {
 
     if (!chartConfig) return null;
 
-    const { type, labels, values, labelKey, valueKey } = chartConfig;
+    const { type, labels, values, valueKey } = chartConfig;
 
     const chartData = {
         labels,

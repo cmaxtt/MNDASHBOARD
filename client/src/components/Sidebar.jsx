@@ -68,6 +68,27 @@ const Sidebar = ({ onSelectQuery, onViewChange, currentView, favorites = [] }) =
             <Divider sx={{ my: 1 }} />
             <Box sx={{ p: 2 }}>
                 <Typography variant="overline" color="text.secondary">
+                    Reports
+                </Typography>
+            </Box>
+            <List dense>
+                <ListItemButton onClick={() => window.location.href = '/reports/fast-sellers'}>
+                    <ListItemIcon>
+                        <QueryStatsIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary="Fast Sellers Report" />
+                </ListItemButton>
+                <ListItemButton onClick={() => window.location.href = '/reports/purchase-summary'}>
+                    <ListItemIcon>
+                        <QueryStatsIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary="Purchase Summary" />
+                </ListItemButton>
+            </List>
+
+            <Divider sx={{ my: 1 }} />
+            <Box sx={{ p: 2 }}>
+                <Typography variant="overline" color="text.secondary">
                     Quick Queries
                 </Typography>
             </Box>

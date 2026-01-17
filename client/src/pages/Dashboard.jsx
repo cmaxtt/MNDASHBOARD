@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Box, Grid } from '@mui/material';
 import Sidebar from '../components/Sidebar';
 import QueryWorkspace from '../components/QueryWorkspace';
@@ -7,14 +7,15 @@ import VisualQueryBuilder from '../components/VisualQueryBuilder';
 const Dashboard = () => {
     const [activeQuery, setActiveQuery] = useState(null);
     const [viewMode, setViewMode] = useState('overview'); // 'overview' | 'builder'
-    const [favorites, setFavorites] = useState([]);
-
-    useEffect(() => {
-        const saved = localStorage.getItem('medbag_favorites');
-        if (saved) {
-            setFavorites(JSON.parse(saved));
+    const [favorites, setFavorites] = useState(() => {
+        try {
+            const saved = localStorage.getItem('medbag_favorites');
+            return saved ? JSON.parse(saved) : [];
+        } catch (e) {
+            console.error("Failed to parse favorites", e);
+            return [];
         }
-    }, []);
+    });
 
     const handleExecuteCustom = (query) => {
         setActiveQuery(query);

@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const { connectDB } = require('./db');
 const schemaRoutes = require('./routes/schema');
 const executeRoutes = require('./routes/execute');
+const reportsRoutes = require('./routes/reports');
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(bodyParser.json());
 // Routes
 app.use('/api/schema', schemaRoutes);
 app.use('/api/execute', executeRoutes);
+app.use('/api/reports', reportsRoutes);
 
 // Health Check
 app.get('/', (req, res) => {
