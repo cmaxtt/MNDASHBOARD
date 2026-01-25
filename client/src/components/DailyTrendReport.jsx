@@ -28,17 +28,12 @@ const DailyTrendReport = () => {
         setLoading(true);
         setError(null);
         try {
-            // Using the SQL logic from SAMPLE_QUERIES but parameterized by date
-            const sql = `
-                SELECT 
-                    CAST(InvoiceDate AS DATE) as Date, 
-                    SUM(SaletotalVI) as TotalSales 
-                FROM tblInvoices 
-                WHERE InvoiceDate BETWEEN '${startDate.format('YYYY-MM-DD')}' AND '${endDate.format('YYYY-MM-DD')}'
-                GROUP BY CAST(InvoiceDate AS DATE) 
-                ORDER BY Date ASC
-            `;
-            const response = await api.post('/execute', { query: sql });
+            const response = await api.get('/reports/daily-trend', {
+                params: {
+                    startDate: startDate.format('YYYY-MM-DD'),
+                    endDate: endDate.format('YYYY-MM-DD')
+                }
+            });
             setData(response.data);
         } catch (err) {
             console.error(err);

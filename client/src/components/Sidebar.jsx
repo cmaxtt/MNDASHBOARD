@@ -4,7 +4,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import StorageIcon from '@mui/icons-material/Storage';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import StarIcon from '@mui/icons-material/Star';
-import { SAMPLE_QUERIES } from '../constants/queries';
+
 
 const Sidebar = ({ onSelectQuery, onViewChange, currentView, favorites = [] }) => {
     return (
@@ -92,22 +92,7 @@ const Sidebar = ({ onSelectQuery, onViewChange, currentView, favorites = [] }) =
                 </ListItemButton>
             </List>
 
-            <Divider sx={{ my: 1 }} />
-            <Box sx={{ p: 2 }}>
-                <Typography variant="overline" color="text.secondary">
-                    Quick Queries
-                </Typography>
-            </Box>
-            <List dense>
-                {SAMPLE_QUERIES.map((query) => (
-                    <ListItemButton key={query.id} onClick={() => onSelectQuery(query)}>
-                        <ListItemIcon>
-                            <StorageIcon fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText primary={query.title} />
-                    </ListItemButton>
-                ))}
-            </List>
+
         </Paper>
     );
 };

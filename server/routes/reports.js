@@ -88,4 +88,41 @@ router.get('/purchase-summary', async (req, res) => {
     }
 });
 
+
+router.get('/daily-trend', async (req, res) => {
+    const { startDate, endDate } = req.query;
+
+    if (!startDate || !endDate) {
+        return res.status(400).send('startDate and endDate are required');
+    }
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+        return res.status(400).send('Invalid date format');
+    }
+
+    try {
+        const pool = await getPool();
+        const result = await pool.request()
+            .input('StartDate', sql.DateTime, start)
+            .input('EndDate', sql.DateTime, end)
+            .query(`
+                SELECT 
+                    CAST(InvoiceDate AS DATE) as Date, 
+                    SUM(SaletotalVI) as TotalSales 
+                FROM tblInvoices 
+                WHERE InvoiceDate BETWEEN @StartDate AND @EndDate
+                GROUP BY CAST(InvoiceDate AS DATE) 
+                ORDER BY Date ASC
+            `);
+
+        res.json(result.recordset);
+    } catch (err) {
+        console.error('Error fetching daily trend report:', err);
+        res.status(500).send(err.message);
+    }
+});
+
 module.exports = router;
