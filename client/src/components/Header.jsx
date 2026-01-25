@@ -3,10 +3,13 @@ import { AppBar, Toolbar, Typography, Box, IconButton, Chip } from '@mui/materia
 import MenuIcon from '@mui/icons-material/Menu';
 import WifiIcon from '@mui/icons-material/Wifi';
 import WifiOffIcon from '@mui/icons-material/WifiOff';
+import SettingsIcon from '@mui/icons-material/Settings';
 import { useDatabase } from '../context/DatabaseContext';
+import SettingsModal from './SettingsModal';
 
 const Header = () => {
     const { isConnected, dbName } = useDatabase();
+    const [settingsOpen, setSettingsOpen] = React.useState(false);
 
     return (
         <AppBar position="static" color="transparent" elevation={0} sx={{ mb: 2 }}>
@@ -25,7 +28,18 @@ const Header = () => {
                         variant="outlined"
                         sx={{ backdropFilter: 'blur(5px)' }}
                     />
+                    <IconButton
+                        color="inherit"
+                        onClick={() => setSettingsOpen(true)}
+                        sx={{
+                            bgcolor: 'rgba(255, 255, 255, 0.05)',
+                            '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.1)' }
+                        }}
+                    >
+                        <SettingsIcon />
+                    </IconButton>
                 </Box>
+                <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
             </Toolbar>
         </AppBar>
     );

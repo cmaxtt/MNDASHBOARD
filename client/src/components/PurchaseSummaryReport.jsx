@@ -38,7 +38,7 @@ const PurchaseSummaryReport = () => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Box sx={{ p: 3 }}>
+            <React.Fragment>
                 <Typography variant="h4" gutterBottom sx={{ color: 'primary.main', fontWeight: 'bold' }}>
                     Purchase Summary by Product
                 </Typography>
@@ -125,7 +125,7 @@ const PurchaseSummaryReport = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-            </Box>
+            </React.Fragment>
         </LocalizationProvider>
     );
 };

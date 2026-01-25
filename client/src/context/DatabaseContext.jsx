@@ -8,9 +8,10 @@ export const useDatabase = () => useContext(DatabaseContext);
 
 export const DatabaseProvider = ({ children }) => {
     const [isConnected, setIsConnected] = useState(false);
-    const [dbName] = useState('MEDBAGSQLDB');
+    const [dbName, setDbName] = useState('MEDBAGSQLDB');
     const [schema, setSchema] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [currentSettings, setCurrentSettings] = useState(null);
 
     // Report State
     const [fastSellersData, setFastSellersData] = useState([]);
@@ -18,14 +19,22 @@ export const DatabaseProvider = ({ children }) => {
     const [loadingReport, setLoadingReport] = useState(false);
 
     useEffect(() => {
+        fetchCurrentSettings();
         checkConnection();
     }, []);
 
+    const fetchCurrentSettings = async () => {
+        try {
+            const response = await api.get('/settings/current');
+            setCurrentSettings(response.data);
+            setDbName(response.data.database || 'MEDBAGSQLDB');
+        } catch (error) {
+            console.error("Failed to fetch current settings:", error);
+        }
+    };
+
     const checkConnection = async () => {
         try {
-            // In a real app, we'd have a specific health check endpoint that verifies DB connectivity
-            // For now, we'll try to fetch the schema as a proxy for connection success.
-            // Assuming the backend is running and connected.
             const response = await api.get('/schema/summary');
             if (response.status === 200) {
                 setIsConnected(true);
@@ -36,6 +45,34 @@ export const DatabaseProvider = ({ children }) => {
             setIsConnected(false);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const validateSettings = async (credentials) => {
+        try {
+            const response = await api.post('/settings/validate', credentials);
+            return response.data;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.response?.data?.message || error.message
+            };
+        }
+    };
+
+    const updateDatabaseSettings = async (credentials) => {
+        try {
+            const response = await api.post('/settings/save', credentials);
+            if (response.data.success) {
+                await fetchCurrentSettings();
+                await checkConnection();
+            }
+            return response.data;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.response?.data?.message || error.message
+            };
         }
     };
 
@@ -75,6 +112,9 @@ export const DatabaseProvider = ({ children }) => {
             schema,
             loading,
             checkConnection,
+            currentSettings,
+            validateSettings,
+            updateDatabaseSettings,
             fastSellersData,
             purchaseSummaryData,
             loadingReport,

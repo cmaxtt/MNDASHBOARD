@@ -12,9 +12,9 @@ const Sidebar = ({ onSelectQuery, onViewChange, currentView, favorites = [] }) =
             sx={{
                 width: 280,
                 flexShrink: 0,
-                height: 'calc(100vh - 100px)',
-                m: 1,
-                borderRadius: 2,
+                height: '100%',
+                borderRadius: 0,
+                borderRight: '1px solid rgba(255, 255, 255, 0.1)',
                 overflowY: 'auto'
             }}
         >
@@ -74,13 +74,19 @@ const Sidebar = ({ onSelectQuery, onViewChange, currentView, favorites = [] }) =
             <List dense>
                 <ListItemButton onClick={() => window.location.href = '/reports/fast-sellers'}>
                     <ListItemIcon>
-                        <QueryStatsIcon fontSize="small" />
+                        <QueryStatsIcon fontSize="small" color="primary" />
                     </ListItemIcon>
                     <ListItemText primary="Fast Sellers Report" />
                 </ListItemButton>
+                <ListItemButton onClick={() => window.location.href = '/reports/daily-trend'}>
+                    <ListItemIcon>
+                        <QueryStatsIcon fontSize="small" color="primary" />
+                    </ListItemIcon>
+                    <ListItemText primary="Daily Trend Report" />
+                </ListItemButton>
                 <ListItemButton onClick={() => window.location.href = '/reports/purchase-summary'}>
                     <ListItemIcon>
-                        <QueryStatsIcon fontSize="small" />
+                        <QueryStatsIcon fontSize="small" color="primary" />
                     </ListItemIcon>
                     <ListItemText primary="Purchase Summary" />
                 </ListItemButton>

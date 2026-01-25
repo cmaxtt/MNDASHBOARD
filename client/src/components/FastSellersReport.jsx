@@ -37,7 +37,7 @@ const FastSellersReport = () => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Box sx={{ p: 3 }}>
+            <React.Fragment>
                 <Typography variant="h4" gutterBottom sx={{ color: 'primary.main', fontWeight: 'bold' }}>
                     Fast Sellers Report by Vendor
                 </Typography>
@@ -126,7 +126,7 @@ const FastSellersReport = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-            </Box>
+            </React.Fragment>
         </LocalizationProvider>
     );
 };

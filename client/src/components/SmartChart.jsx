@@ -105,7 +105,7 @@ const SmartChart = ({ data, title }) => {
     };
 
     return (
-        <Paper sx={{ p: 2, mb: 3, height: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Paper sx={{ p: 2, mb: 3, height: 500, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
             <Box sx={{ width: '100%', height: '100%' }}>
                 {type === 'line' && <Line options={options} data={chartData} />}
                 {type === 'bar' && <Bar options={options} data={chartData} />}

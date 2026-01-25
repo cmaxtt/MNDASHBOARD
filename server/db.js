@@ -1,7 +1,7 @@
 const sql = require('mssql');
 require('dotenv').config();
 
-const config = {
+let config = {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     server: process.env.DB_SERVER,
@@ -24,7 +24,33 @@ const connectDB = async () => {
         return poolPromise;
     } catch (err) {
         console.error('Database Connection Failed! Bad Config: ', err);
+        poolPromise = null; // Reset so next attempt can try again
+        throw err;
     }
+};
+
+const closePool = async () => {
+    if (poolPromise) {
+        try {
+            const pool = await poolPromise;
+            await pool.close();
+        } catch (err) {
+            console.error('Error closing pool:', err);
+        }
+        poolPromise = null;
+    }
+};
+
+const updateConfig = async (newConfig) => {
+    await closePool();
+    config = {
+        ...config,
+        user: newConfig.user,
+        password: newConfig.password,
+        server: newConfig.server,
+        database: newConfig.database
+    };
+    return connectDB();
 };
 
 const getPool = () => {
@@ -35,5 +61,7 @@ const getPool = () => {
 module.exports = {
     connectDB,
     getPool,
-    sql
+    sql,
+    updateConfig,
+    config // Exporting original config object (reference)
 };
