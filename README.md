@@ -8,17 +8,25 @@ A high-performance, dark-themed analytics dashboard built for the MEDBAGSQLDB sy
 
 ## Features
 
--   **📊 Analytics Engine**: Pre-built high-value queries (Daily Trends, Top Salespeople, Stock Alerts).
+-   **📊 Analytics Engine**: Pre-built high-value queries (Daily Trends, Top Salespeople, Stock Alerts) with integrated KPI Dashboards.
 -   **🎨 Visual Query Builder**: Drag-and-drop interface to build complex SQL queries without writing code.
--   **📈 Smart Visualization**: Automatically selects the best chart type (Line, aggregate Bar, Doughnut) based on your data.
+-   **📈 Professional Visualization**: Modern, interactive charts (Area, Bar, Line) powered by **Recharts**.
+-   **📑 Advanced Data Grids**: High-performance data tables with sorting, filtering, and export capabilities using **MUI X Data Grid**.
 -   **💾 Persistence**: Save your favorite queries for quick access later.
 -   **✨ Vibe Design**: Modern "Glassmorphism" UI with dark mode and smooth transitions using MUI.
 
 ## Tech Stack
 
--   **Frontend**: React (Vite), Material UI (MUI), Chart.js, Axios.
+-   **Frontend**: React (Vite), Material UI (MUI), MUI X Data Grid, Recharts, Axios.
 -   **Backend**: Node.js, Express.
 -   **Database**: MS SQL Server (via `mssql`/Tedious driver).
+
+## Recent Updates (January 2026)
+
+-   **Upgraded Reporting Engine**: Replaced legacy tables with **MUI X Data Grid** for better performance and professional UI.
+-   **New Charting Library**: Integrated **Recharts** for smoother, responsive data visualizations.
+-   **KPI Dashboard Layouts**: Introduced `KPICard` components to highlight critical metrics at a glance.
+-   **Refactored Reports**: Fully updated `Daily Trend`, `Fast Sellers`, and `Purchase Summary` reports with modern layouts and statistics.
 
 ## Getting Started
 
