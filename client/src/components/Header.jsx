@@ -18,7 +18,7 @@ const Header = () => {
                     <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1, letterSpacing: '0.1em', fontWeight: 'bold', background: 'linear-gradient(45deg, #00e5ff, #ff2975)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                    MEDBAG ANALYTICS
+                    PARK VIEW ANALITICAL
                 </Typography>
                 <Box display="flex" alignItems="center" gap={2}>
                     <Chip
